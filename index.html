@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#79d9ed">
+<title>BLACK SHOP | خدماتك الرقمية</title>
+<style>
+:root{
+  --cyan:#79d9ed;
+  --purple:#9274e8;
+  --ink:#20243a;
+  --muted:#73788b;
+  --bg:#f6f8fc;
+  --white:#fff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+header{
+  background:linear-gradient(120deg,var(--cyan),var(--purple));
+  padding:20px 16px 28px;color:#fff;border-radius:0 0 28px 28px;
+}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:25px;font-weight:900;letter-spacing:1px}
+.wa{
+  background:white;color:#5147a8;text-decoration:none;
+  padding:10px 14px;border-radius:22px;font-weight:800;font-size:13px;
+}
+.hero{padding:28px 2px 8px}
+.hero h1{font-size:27px;margin:0 0 8px}
+.hero p{margin:0;line-height:1.8;font-size:14px}
+main{max-width:900px;margin:auto;padding:18px 14px 45px}
+.search{
+  width:100%;padding:15px;border:1px solid #e4e7f0;
+  border-radius:15px;font-size:16px;background:#fff;margin:0 0 18px;
+}
+h2{font-size:20px;margin:20px 0 12px}
+.categories{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:9px;
+}
+.cat{
+  border:1px solid #e8eaf2;background:#fff;border-radius:14px;
+  padding:13px 5px;text-align:center;font-weight:750;
+  color:var(--ink);cursor:pointer;font-size:13px;
+}
+.cat.active{background:#eeeaff;border:1px solid var(--purple);color:#654ac2}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{
+  background:#fff;border:1px solid #eceef4;border-radius:17px;
+  padding:14px;min-width:0;display:flex;flex-direction:column;
+}
+.card .icon{font-size:25px;margin-bottom:8px}
+.card h3{font-size:15px;margin:0 0 7px}
+.card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 12px}
+.price{font-weight:850;color:#6852c3;font-size:14px;margin-top:auto;padding-bottom:10px}
+button{
+  border:0;border-radius:12px;padding:12px 14px;
+  font-size:14px;font-weight:800;cursor:pointer;
+}
+.order-btn{background:linear-gradient(110deg,var(--cyan),var(--purple));color:white}
+.secondary{background:#f0effb;color:#5f4bb5}
+.note{
+  background:#fff;border:1px solid #e9eaf2;padding:15px;
+  border-radius:15px;color:var(--muted);font-size:13px;line-height:1.8;
+  margin-top:20px;
+}
+footer{text-align:center;padding:25px 15px;color:var(--muted);font-size:13px}
+.modal{
+  display:none;position:fixed;inset:0;background:#17182c99;
+  z-index:10;overflow:auto;padding:18px;
+}
+.modal-box{
+  background:white;border-radius:20px;max-width:500px;
+  margin:25px auto;padding:20px;
+}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.close{background:#f1f1f7;color:#333;padding:8px 12px}
+label{display:block;font-size:13px;font-weight:750;margin:13px 0 6px}
+input,select,textarea{
+  width:100%;padding:13px;border:1px solid #dfe2eb;
+  border-radius:11px;font-size:15px;background:white;
+}
+textarea{min-height:75px;resize:vertical}
+.total{
+  background:#f1efff;border-radius:12px;padding:13px;
+  margin:15px 0;font-weight:850;color:#5b49ae;
+}
+.full{width:100%;margin-top:8px}
+.hidden{display:none}
+@media(min-width:650px){
+  .categories{grid-template-columns:repeat(5,1fr)}
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .hero h1{font-size:34px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top">
+    <div class="logo">BLACK SHOP</div>
+    <a class="wa" href="https://wa.me/21656377619" target="_blank">WhatsApp</a>
+  </div>
+  <div class="hero">
+    <h1>كل خدماتك الرقمية في مكان واحد</h1>
+    <p>اختر الخدمة المناسبة ليك، شوف الباقات والأسعار، وابعث طلبك مباشرة عبر WhatsApp.</p>
+  </div>
+</header>
+
+<main>
+  <input id="search" class="search" placeholder="ابحث عن خدمة أو تطبيق..." aria-label="البحث">
+
+  <h2>أقسام المتجر</h2>
+  <div class="categories" id="categories"></div>
+
+  <h2 id="sectionTitle">جميع الخدمات</h2>
+  <div class="grid" id="products"></div>
+
+  <div class="note">
+    <strong>معلومات الطلب:</strong><br>
+    نستقبل الطلبات على مدار الساعة. قد يتأخر الرد أحيانًا بسبب ضغط العمل،
+    لكن نحرص على الإجابة على جميع الرسائل في أقرب وقت ممكن. ❤️
+  </div>
+</main>
+
+<footer>
+  BLACK SHOP © 2026<br>
+  للاستفسار والطلبات: +216 56 377 619
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="modalTitle">تفاصيل الطلب</h2>
+      <button class="close" onclick="closeModal()">إغلاق</button>
+    </div>
+
+    <form id="orderForm">
+      <label>الخدمة</label>
+      <input id="serviceName" readonly>
+
+      <div id="quantityWrap">
+        <label>الكمية</label>
+        <input id="quantity" type="number" min="100" step="1" value="100">
+      </div>
+
+      <div id="packageWrap" class="hidden">
+        <label>اختر الباقة</label>
+        <select id="package"></select>
+      </div>
+
+      <div id="playerWrap" class="hidden">
+        <label>Player ID (معرّف اللاعب)</label>
+        <input id="player" placeholder="اكتب Player ID">
+      </div>
+
+      <label>رابط الحساب أو المنشور (إذا مطلوب)</label>
+      <input id="link" placeholder="ضع الرابط هنا">
+
+      <label>طريقة الدفع</label>
+      <select id="payment">
+        <option value="D17">D17</option>
+        <option value="Sold">Sold</option>
+      </select>
+
+      <div id="extraWrap">
+        <label>معلومات إضافية</label>
+        <textarea id="extra" placeholder="أي تفاصيل أخرى..."></textarea>
+      </div>
+
+      <div class="total" id="total">السعر: حسب الطلب</div>
+      <button class="order-btn full" type="submit">إرسال الطلب عبر WhatsApp</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const WA = "21656377619";
+
+const categories = [
+  ["all","الكل"],
+  ["Instagram","Instagram"],
+  ["Facebook","Facebook"],
+  ["TikTok","TikTok"],
+  ["YouTube","YouTube"],
+  ["Gaming","Gaming"],
+  ["Internet","Internet"],
+  ["Subscriptions","الاشتراكات"],
+  ["Verification","التوثيق"],
+  ["Sponsoring","الإشهار"],
+  ["Other","تطبيقات أخرى"]
+];
+
+const products = [
+  // Instagram
+  {cat:"Instagram",name:"Instagram Followers",icon:"📸",rate:10,unit:"1000 متابع"},
+  {cat:"Instagram",name:"Instagram Likes",icon:"❤️",rate:5,unit:"1000 إعجاب"},
+  {cat:"Instagram",name:"Instagram Views",icon:"▶️",rate:3,unit:"1000 مشاهدة"},
+  {cat:"Instagram",name:"Instagram Reels Views",icon:"🎬",quote:true},
+  {cat:"Instagram",name:"Instagram Comments",icon:"💬",quote:true},
+
+  // Facebook
+  {cat:"Facebook",name:"Facebook Views",icon:"👁️",rate:1,unit:"1000 مشاهدة"},
+  {cat:"Facebook",name:"Facebook Post Likes",icon:"👍",rate:2,unit:"1000 إعجاب"},
+  {cat:"Facebook",name:"Facebook Followers",icon:"👥",quote:true},
+  {cat:"Facebook",name:"Facebook Page Likes",icon:"📄",quote:true},
+
+  // TikTok
+  {cat:"TikTok",name:"TikTok Followers",icon:"🎵",rate:6,unit:"1000 متابع"},
+  {cat:"TikTok",name:"TikTok Likes",icon:"❤️",rate:4,unit:"1000 إعجاب"},
+  {cat:"TikTok",name:"TikTok Views",icon:"▶️",rate:1,unit:"1000 مشاهدة"},
+  {cat:"TikTok",name:"TikTok Coins",icon:"🪙",quote:true},
+
+  // YouTube
+  {cat:"YouTube",name:"YouTube Views",icon:"▶️",rate:5,unit:"1000 مشاهدة"},
+  {cat:"YouTube",name:"YouTube Subscribers",icon:"🔔",rate:100,unit:"1000 مشترك"},
+  {cat:"YouTube",name:"YouTube Likes",icon:"👍",quote:true},
+
+  // Free Fire
+  {cat:"Gaming",name:"Free Fire Diamonds",icon:"💎",packages:[
+    ["110 Diamonds",5,5],["220 Diamonds",10,10],
+    ["330 Diamonds",15,15],["550 Diamonds",25,25],
+    ["1188 Diamonds",50,51],["2200 Diamonds",90,92],
+    ["Booyah Pass",16,16],["Weekly Membership",11,11],
+    ["Monthly Membership",50,50]
+  ],player:true},
+
+  // eFootball
+  {cat:"Gaming",name:"eFootball Coins",icon:"⚽",packages:[
+    ["137 Coins",7,7],["315 Coins",15,15],
+    ["578 Coins",26,26],["788 Coins",35,35],
+    ["1092 Coins",45,45],["2237 Coins",92,92]
+  ]},
+
+  // Internet
+  {cat:"Internet",name:"Internet Recharge",icon:"📶",packages:[
+    ["Orange 25 Go",30,30],["Tunisie Telecom 25 Go",30,30],
+    ["Ooredoo 25 Go",30,30],["Orange 30 Go",36,36],
+    ["Ooredoo 30 Go",36,36],["Ooredoo 100 Go",70,70],
+    ["Ooredoo 200 Go",100,100]
+  ]},
+
+  // Subscriptions
+  {cat:"Subscriptions",name:"Netflix",icon:"🎬",packages:[
+    ["Personal account – 1 month",25,27],
+    ["Personal account – 3 months",50,58]
+  ]},
+  {cat:"Subscriptions",name:"YouTube Premium",icon:"▶️",packages:[
+    ["1 month – Full access",25,28]
+  ]},
+  {cat:"Subscriptions",name:"ChatGPT Plus",icon:"🤖",packages:[
+    ["Personal private – 1 month",90,95],
+    ["Shared – 1 month",35,38],
+    ["Shared – 3 months",83,90]
+  ]},
+  {cat:"Subscriptions",name:"Claude Pro",icon:"🧠",packages:[
+    ["Personal private – 1 month",95,98],
+    ["Shared – 1 month (20-day guarantee)",40,45]
+  ]},
+  {cat:"Subscriptions",name:"Canva Pro",icon:"🎨",packages:[
+    ["Full access – 1 month",20,25],
+    ["Full access – 3 months",40,50]
+  ]},
+  {cat:"Subscriptions",name:"Gemini AI",icon:"✨",packages:[
+    ["Gemini AI Pro – 1 month",28,30],
+    ["Gemini AI Plus – 1 month",30,32]
+  ]},
+  {cat:"Subscriptions",name:"QuillBot Premium",icon:"✍️",packages:[
+    ["Shared account – 1 month",25,28]
+  ]},
+  {cat:"Subscriptions",name:"Spotify Premium",icon:"🎧",packages:[
+    ["Full account – 1 month",21,25]
+  ]},
+
+  // Verification
+  {cat:"Verification",name:"Facebook Verification",icon:"☑️",packages:[
+    ["First-time verification",15,18],
+    ["Second time or more",25,25]
+  ]},
+  {cat:"Verification",name:"Instagram Verification",icon:"☑️",packages:[
+    ["First-time verification",15,18],
+    ["Second time or more",25,25]
+  ]},
+
+  // Sponsoring
+  {cat:"Sponsoring",name:"Facebook Sponsoring",icon:"📢",quote:true,
+   description:"يمكنك تحديد السعر وسنعطيك إحصائيات الإشهار في الخاص"},
+  {cat:"Sponsoring",name:"Instagram Sponsoring",icon:"📢",quote:true,
+   description:"يمكنك تحديد السعر وسنعطيك إحصائيات الإشهار في الخاص"},
+
+  // Other
+  {cat:"Other",name:"تطبيقات أخرى",icon:"📱",quote:true,
+   description:"اكتب اسم التطبيق وأرسل Screenshot للعرض في الخاص لكي نعطيك السعر"}
+];
+
+let activeCategory = "all";
+let selected = null;
+
+function money(n){
+  return Number(n).toLocaleString("en-US",{maximumFractionDigits:3})+" DT";
+}
+
+function renderCategories(){
+  document.getElementById("categories").innerHTML = categories.map(c=>
+    `<button class="cat ${activeCategory===c[0]?"active":""}" data-cat="${c[0]}">${c[1]}</button>`
+  ).join("");
+  document.querySelectorAll(".cat").forEach(b=>{
+    b.addEventListener("click",()=>{
+      activeCategory=b.dataset.cat;
+      renderCategories();
+      renderProducts();
+    });
+  });
+}
+
+function renderProducts(){
+  const term=document.getElementById("search").value.trim().toLowerCase();
+  const list=products.filter(p=>
+    (activeCategory==="all" || p.cat===activeCategory) &&
+    (p.name.toLowerCase().includes(term) || p.cat.toLowerCase().includes(term))
+  );
+  document.getElementById("sectionTitle").textContent =
+    activeCategory==="all" ? "جميع الخدمات" : categories.find(c=>c[0]===activeCategory)?.[1];
+
+  document.getElementById("products").innerHTML=list.map((p)=>{
+    let price=p.rate ? money(p.rate)+" / "+p.unit :
+      p.packages ? "باقات متعددة" : "السعر حسب الطلب";
+    return `<article class="card">
+      <div class="icon">${p.icon}</div>
+      <h3>${p.name}</h3>
+      <p>${p.description || "اختر الخدمة وأرسل طلبك عبر WhatsApp."}</p>
+      <div class="price">${price}</div>
+      <button class="order-btn" data-name="${p.name}">اطلب الآن</button>
+    </article>`;
+  }).join("");
+
+  document.querySelectorAll(".card .order-btn").forEach(b=>{
+    b.addEventListener("click",()=>openProduct(b.dataset.name));
+  });
+}
+
+function openProduct(name){
+  selected=products.find(p=>p.name===name);
+  if(!selected)return;
+
+  document.getElementById("modal").style.display="block";
+  document.getElementById("modalTitle").textContent=selected.name;
+  document.getElementById("serviceName").value=selected.name;
+
+  const quantityWrap=document.getElementById("quantityWrap");
+  const packageWrap=document.getElementById("packageWrap");
+  const playerWrap=document.getElementById("playerWrap");
+
+  quantityWrap.classList.toggle("hidden",!selected.rate && !selected.quote);
+  packageWrap.classList.toggle("hidden",!selected.packages);
+  playerWrap.classList.toggle("hidden",!selected.player);
+
+  document.getElementById("quantity").value=100;
+  document.getElementById("quantity").min=100;
+  document.getElementById("link").value="";
+  document.getElementById("player").value="";
+  document.getElementById("extra").value="";
+
+  if(selected.packages){
+    document.getElementById("package").innerHTML=selected.packages.map((p,i)=>
+      `<option value="${i}">${p[0]} — D17: ${money(p[1])} | Sold: ${money(p[2])}</option>`
+    ).join("");
+  }
+  updateTotal();
+}
+
+function closeModal(){
+  document.getElementById("modal").style.display="none";
+}
+
+function updateTotal(){
+  if(!selected)return;
+  const method=document.getElementById("payment").value;
+  let price=null;
+
+  if(selected.rate){
+    const q=Number(document.getElementById("quantity").value);
+    if(q>=100) price=q/1000*selected.rate;
+  }else if(selected.packages){
+    const i=Number(document.getElementById("package").value);
+    const pack=selected.packages[i];
+    if(pack)price=method==="D17"?pack[1]:pack[2];
+  }
+
+  document.getElementById("total").textContent =
+    price!==null ? "السعر التقديري: "+money(price) :
+    "السعر: حسب الطلب — نبعثولك التفاصيل على WhatsApp";
+}
+
+document.getElementById("quantity").addEventListener("input",updateTotal);
+document.getElementById("package").addEventListener("change",updateTotal);
+document.getElementById("payment").addEventListener("change",updateTotal);
+
+document.getElementById("orderForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  if(!selected)return;
+
+  const method=document.getElementById("payment").value;
+  let priceText="حسب الطلب";
+  let details="";
+
+  if(selected.rate){
+    const q=Number(document.getElementById("quantity").value);
+    if(!Number.isFinite(q)||q<100){
+      alert("الكمية لازم تكون 100 أو أكثر.");
+      return;
+    }
+    priceText=money(q/1000*selected.rate);
+    details="الكمية: "+q;
+  }
+
+  if(selected.packages){
+    const i=Number(document.getElementById("package").value);
+    const pack=selected.packages[i];
+    if(pack){
+      priceText=money(method==="D17"?pack[1]:pack[2]);
+      details="الباقة: "+pack[0];
+    }
+  }
+
+  if(selected.quote){
+    details+="\nالسعر: يُحدّد بعد مراجعة الطلب.";
+  }
+
+  const player=document.getElementById("player").value.trim();
+  if(selected.player&&!player){
+    alert("من فضلك اكتب Player ID.");
+    return;
+  }
+
+  const link=document.getElementById("link").value.trim();
+  const extra=document.getElementById("extra").value.trim();
+
+  const message=
+`طلب جديد من BLACK SHOP ❤️
+الخدمة: ${selected.name}
+${details}
+طريقة الدفع: ${method}
+السعر: ${priceText}
+${player?"Player ID: "+player:""}
+${link?"الرابط: "+link:""}
+${extra?"معلومات إضافية: "+extra:""}
+
+الرجاء تأكيد الطلب.`;
+
+  window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(message),"_blank");
+});
+
+document.getElementById("search").addEventListener("input",renderProducts);
+
+renderCategories();
+renderProducts();
+</script>
+</body>
+</html>
